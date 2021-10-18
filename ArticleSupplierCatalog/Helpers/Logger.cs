@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace ArticleSupplierCatalog.Helpers
 {
+    #region logger
     public class Logger
     {
         public void Info(string message)
@@ -23,4 +21,5 @@ namespace ArticleSupplierCatalog.Helpers
             Console.WriteLine(message);
         }
     }
+    #endregion
 }

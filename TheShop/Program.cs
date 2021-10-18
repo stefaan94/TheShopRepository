@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ArticleSupplierCatalog.Logic;
+using ArticleSupplierCatalog.Services;
 using ArticleSupplierCatalog.Utilities;
 
 namespace TheShop
@@ -12,8 +13,8 @@ namespace TheShop
     {
         static void Main(string[] args)
         {
-            IDatabaseDriver driver = new DatabaseDriver();
-            IArticleSupplier data = new ArticleSupplier(driver);
+            var shopService = new ShopService();
+            IArticleSupplier data = new ArticleSupplier();
 
             try
             {
@@ -31,6 +32,23 @@ namespace TheShop
             catch (Exception ex)
             {
                 Console.WriteLine("Articles not found: " + ex);
+            }
+
+            try
+            {
+                Console.WriteLine("Enter article Id you want to buy");
+                var articleId = Convert.ToInt32(Console.ReadLine());
+
+                Console.WriteLine("Enter maximum expected price");
+                var minExpectedPrice = Convert.ToInt32(Console.ReadLine());
+
+                //order and sell
+                shopService.OrderAndSellArticle(articleId, minExpectedPrice, 10);
+            }
+
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
     }

@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using ArticleSupplierCatalog.Helpers;
 using ArticleSupplierCatalog.Logic;
 using ArticleSupplierCatalog.Models;
 
@@ -11,29 +8,36 @@ namespace ArticleSupplierCatalog.Utilities
 {
     public class DatabaseDriver : IDatabaseDriver
     {
+        #region listArticleSupplier
         public List<Supplier> GetArticleSupplier()
         {
             var articles = GetSupplierArticles();
             return articles.ToList();
         }
+        #endregion
+
+        #region getArticleById
 
         public Article GetArticleById(int id)
         {
             Article output = null;
-            IArticleSupplier articleSupplier = new ArticleSupplier(new DatabaseDriver());
+            IArticleSupplier articleSupplier = new ArticleSupplier();
             var result = articleSupplier.GetFlatList().Find(x => x.Id == id);
-                if (result != null)
-                {
-                    output = result;
-                }
-                else
-                {
-                    throw new ArgumentException("Not found", nameof(id));
-                }
+            if (result != null)
+            {
+                output = result;
+            }
+            else
+            {
+                throw new ArgumentException("Not found", nameof(id));
+            }
 
             return output;
         }
 
+        #endregion
+
+        #region addArticleRegion
         public void Add(Article article)
         {
             List<Article> _articles = new List<Article>();
@@ -46,6 +50,9 @@ namespace ArticleSupplierCatalog.Utilities
                 throw new Exception();
             }
         }
+        #endregion
+
+        #region listOfArticleSupplier
         public List<Supplier> GetSupplierArticles()
         {
             var articles = new List<Supplier>
@@ -105,5 +112,6 @@ namespace ArticleSupplierCatalog.Utilities
             };
             return articles;
         }
+        #endregion
     }
 }
