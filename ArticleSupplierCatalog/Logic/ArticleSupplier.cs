@@ -10,6 +10,7 @@ namespace ArticleSupplierCatalog.Logic
     {
         IDatabaseDriver _database = new DatabaseDriver();
 
+        
         #region addArticleRegion
         public void Add(Article article)
         {
