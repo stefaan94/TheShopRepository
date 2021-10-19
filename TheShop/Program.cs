@@ -43,7 +43,7 @@ namespace TheShop
                 var minExpectedPrice = Convert.ToInt32(Console.ReadLine());
 
                 //order and sell
-                shopService.OrderAndSellArticle(articleId, minExpectedPrice, 10);
+                shopService.OrderAndSellArticle(articleId, minExpectedPrice, 1);
             }
 
             catch (Exception ex)

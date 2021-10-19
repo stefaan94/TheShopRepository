@@ -8,9 +8,8 @@ namespace ArticleSupplierCatalog.Logic
 {
     public class ArticleSupplier : IArticleSupplier
     {
-        IDatabaseDriver _database = new DatabaseDriver();
+        private readonly IDatabaseDriver _database = new DatabaseDriver();
 
-        
         #region addArticleRegion
         public void Add(Article article)
         {
@@ -39,12 +38,17 @@ namespace ArticleSupplierCatalog.Logic
         {
             Article article = null;
             var findMinPrice = GetFlatList().Where(x => x.Id == articleId).Min(kvp => kvp.ArticlePrice);
+            if (buyerId == 0 || articleId == 0 || maxExpectedPrice == 0)
+            {
+                throw new ArgumentNullException();
+            }
             foreach (var articles in GetFlatList())
             {
                 if (articleId != articles.Id) continue;
                 if (findMinPrice == articles.ArticlePrice)
                 {
                     if (articles.IsSold) continue;
+                   
                     if (maxExpectedPrice >= articles.ArticlePrice)
                     {
                         article = articles;
@@ -54,6 +58,10 @@ namespace ArticleSupplierCatalog.Logic
                 {
                     article = null;
                 }
+            }
+            if (article == null)
+            {
+                throw new ArgumentNullException();
             }
             return article;
         }

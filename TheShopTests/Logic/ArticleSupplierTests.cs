@@ -19,10 +19,10 @@ namespace TheShopTests.Logic
             {
                 mock.Mock<IDatabaseDriver>()
                     .Setup(x => x.GetArticleSupplier())
-                    .Returns(GetSupplierArticles());
+                    .Returns(GetSupplierArticlesMock());
 
                 var cls = mock.Create<DatabaseDriver>();
-                var expected = GetSupplierArticles();
+                var expected = GetSupplierArticlesMock();
 
                 var actual = cls.GetArticleSupplier();
 
@@ -68,12 +68,40 @@ namespace TheShopTests.Logic
         [InlineData(2, 222, 1, 60)]
         public void CreateOrder_Successful(int articleId, int maxExpectedPrice, int buyerId, int expectedPrice)
         {
-            ArticleSupplier processor = new ArticleSupplier();
-
-                var actual = processor.OrderArticle(articleId, maxExpectedPrice, buyerId);
-
-                Assert.Equal(expectedPrice, actual.ArticlePrice);
+            var processor = new ArticleSupplier();
+            var actual = processor.OrderArticle(articleId, maxExpectedPrice, buyerId);
+            Assert.Equal(expectedPrice, actual.ArticlePrice);
         }
+
+        [Theory]
+        [InlineData(0, 222, 1)]
+        public void CreateOrder_ThrowsInvalidOperationException(int articleId, int maxExpectedPrice, int buyerId)
+        {
+            var processor = new ArticleSupplier();
+
+            var ex = Record.Exception(() => processor.OrderArticle(articleId, maxExpectedPrice, buyerId));
+            Assert.Throws<InvalidOperationException>(() => processor.OrderArticle(articleId, maxExpectedPrice, buyerId));
+            Assert.NotNull(ex);
+        }
+
+
+        [Theory]
+        [InlineData(1, 222, 0, null)]
+        [InlineData(1, 0, 1, null)]
+        [InlineData(1, 1, 1, null)]
+        public void CreateOrder_ThrowsArgumentNullException(int articleId, int maxExpectedPrice, int buyerId, string expectedInvalidParameter)
+        {
+            var processor = new ArticleSupplier();
+
+            var ex = Record.Exception(() => processor.OrderArticle(articleId, maxExpectedPrice, buyerId));
+            Assert.Throws<ArgumentNullException>(() => processor.OrderArticle(articleId, maxExpectedPrice, buyerId));
+            Assert.NotNull(ex);
+            if (ex is ArgumentException argEx)
+            {
+                Assert.Equal(expectedInvalidParameter, argEx.ParamName);
+            }
+        }
+
 
         [Fact]
         public void SellArticle_ValidCall()
@@ -86,7 +114,7 @@ namespace TheShopTests.Logic
                     NameOfArticle = "Article 1 from SupplierNo1",
                     ArticlePrice = 20
                 };
-                int buyerId = 10;
+                const int buyerId = 10;
 
                 mock.Mock<IDatabaseDriver>()
                     .Setup(x => x.Add(article));
@@ -96,14 +124,11 @@ namespace TheShopTests.Logic
                 cls.SellArticle(article, buyerId);
 
                 Assert.True(article.IsSold);
-    
-
             }
         }
+        
 
-
-
-        private List<Supplier> GetSupplierArticles()
+        private List<Supplier> GetSupplierArticlesMock()
         {
             var articles = new List<Supplier>
             {

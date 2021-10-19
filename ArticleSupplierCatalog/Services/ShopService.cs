@@ -18,11 +18,11 @@ namespace ArticleSupplierCatalog.Services
             #region orderRegion
             try
             {
-                _logger.Debug("Trying to sell article with id=" + articleId);
+                _logger.Debug($"Trying to sell article with id= { articleId }");
                 articleForSale = _iSupplierArticlesRepository.OrderArticle(articleId, maxExpectedPrice, buyerId);
-                if (articleForSale == null) throw new Exception();
+                if (articleForSale == null) throw new ArgumentException();
             }
-            catch (Exception)
+            catch (ArgumentNullException)
             {
                 throw new Exception("Could not order article\n, None of articles meet maximum expected price");
             }
@@ -32,8 +32,8 @@ namespace ArticleSupplierCatalog.Services
             try
             {
                 _iSupplierArticlesRepository.SellArticle(articleForSale, buyerId);
-                _logger.Info("Article with id=" + articleForSale.Id + " is sold with a price of " +
-                             articleForSale.ArticlePrice + " which is the lowest price for wanted article.");
+                _logger.Info($"Article with id= { articleForSale.Id }, is sold with a price of {articleForSale.ArticlePrice}," +
+                                    " which is the lowest price for wanted article.");
             }
             catch (ArgumentNullException)
             {
