@@ -75,33 +75,15 @@ namespace TheShopTests.Logic
 
         [Theory]
         [InlineData(0, 222, 1)]
-        public void CreateOrder_ThrowsInvalidOperationException(int articleId, int maxExpectedPrice, int buyerId)
+        [InlineData(1, 222, 0)]
+        [InlineData(1, 0, 1)]
+        [InlineData(1, 1, 1)]
+        public void CreateOrder_Null(int articleId, int maxExpectedPrice, int buyerId)
         {
             var processor = new ArticleSupplier();
-
             var ex = Record.Exception(() => processor.OrderArticle(articleId, maxExpectedPrice, buyerId));
-            Assert.Throws<InvalidOperationException>(() => processor.OrderArticle(articleId, maxExpectedPrice, buyerId));
-            Assert.NotNull(ex);
+            Assert.Null(ex);
         }
-
-
-        [Theory]
-        [InlineData(1, 222, 0, null)]
-        [InlineData(1, 0, 1, null)]
-        [InlineData(1, 1, 1, null)]
-        public void CreateOrder_ThrowsArgumentNullException(int articleId, int maxExpectedPrice, int buyerId, string expectedInvalidParameter)
-        {
-            var processor = new ArticleSupplier();
-
-            var ex = Record.Exception(() => processor.OrderArticle(articleId, maxExpectedPrice, buyerId));
-            Assert.Throws<ArgumentNullException>(() => processor.OrderArticle(articleId, maxExpectedPrice, buyerId));
-            Assert.NotNull(ex);
-            if (ex is ArgumentException argEx)
-            {
-                Assert.Equal(expectedInvalidParameter, argEx.ParamName);
-            }
-        }
-
 
         [Fact]
         public void SellArticle_ValidCall()
@@ -126,7 +108,13 @@ namespace TheShopTests.Logic
                 Assert.True(article.IsSold);
             }
         }
-        
+        [Fact]
+        public void SellArticle_Null()
+        {
+            var processor = new ArticleSupplier();
+            var ex = Record.Exception(() => processor.SellArticle(new Article(), 1));
+            Assert.Null(ex);
+        }
 
         private List<Supplier> GetSupplierArticlesMock()
         {

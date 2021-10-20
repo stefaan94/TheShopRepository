@@ -6,7 +6,7 @@ namespace ArticleSupplierCatalog.Utilities
     public interface IDatabaseDriver
     {
         List<Supplier> GetArticleSupplier();
-        Article GetArticleById(int id);
+        Supplier GetSupplierById(int id);
         void Add(Article article);
 
     }

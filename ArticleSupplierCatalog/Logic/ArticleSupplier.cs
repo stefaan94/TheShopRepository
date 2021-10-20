@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ArticleSupplierCatalog.Helpers;
 using ArticleSupplierCatalog.Models;
 using ArticleSupplierCatalog.Utilities;
 
@@ -33,35 +34,37 @@ namespace ArticleSupplierCatalog.Logic
         }
         #endregion
 
+        public bool FindArticleById(int id)
+        {
+            var article = GetFlatList().Find(x => x.Id == id);
+            if (article != null)
+            {
+                return true;
+            }
+            return false;
+        }
+        
         #region orderRegion
         public Article OrderArticle(int articleId, int maxExpectedPrice, int buyerId)
         {
             Article article = null;
-            var findMinPrice = GetFlatList().Where(x => x.Id == articleId).Min(kvp => kvp.ArticlePrice);
-            if (buyerId == 0 || articleId == 0 || maxExpectedPrice == 0)
+            var articleFound = FindArticleById(articleId);
+            if (articleFound)
             {
-                throw new ArgumentNullException();
-            }
-            foreach (var articles in GetFlatList())
-            {
-                if (articleId != articles.Id) continue;
-                if (findMinPrice == articles.ArticlePrice)
+                var findMinPrice = GetFlatList().Where(x => x.Id == articleId).Min(kvp => kvp.ArticlePrice);
+                foreach (var articles in GetFlatList())
                 {
-                    if (articles.IsSold) continue;
-                   
-                    if (maxExpectedPrice >= articles.ArticlePrice)
+                    if (articleId != articles.Id) continue;
+                    if (findMinPrice == articles.ArticlePrice)
                     {
-                        article = articles;
+                        if (articles.IsSold) continue;
+                       
+                        if (maxExpectedPrice >= articles.ArticlePrice)
+                        {
+                            article = articles;
+                        }
                     }
                 }
-                else
-                {
-                    article = null;
-                }
-            }
-            if (article == null)
-            {
-                throw new ArgumentNullException();
             }
             return article;
         }
@@ -70,20 +73,12 @@ namespace ArticleSupplierCatalog.Logic
         #region sellRegion
         public void SellArticle(Article articleForSale, int buyerId)
         {
-            try
+            if (articleForSale != null)
             {
-                if (articleForSale != null)
-                {
-                    articleForSale.IsSold = true;
-                    articleForSale.SoldDate = DateTime.Now;
-                    articleForSale.BuyerUserId = buyerId;
-                    Add(articleForSale);
-                }
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
+                articleForSale.IsSold = true;
+                articleForSale.SoldDate = DateTime.Now;
+                articleForSale.BuyerUserId = buyerId;
+                Add(articleForSale);
             }
         }
         #endregion

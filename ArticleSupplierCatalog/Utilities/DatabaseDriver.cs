@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using ArticleSupplierCatalog.Helpers;
 using ArticleSupplierCatalog.Logic;
 using ArticleSupplierCatalog.Models;
 
@@ -18,21 +19,10 @@ namespace ArticleSupplierCatalog.Utilities
 
         #region getArticleById
 
-        public Article GetArticleById(int id)
+        public Supplier GetSupplierById(int id)
         {
-            Article output = null;
-            IArticleSupplier articleSupplier = new ArticleSupplier();
-            var result = articleSupplier.GetFlatList().Find(x => x.Id == id);
-            if (result != null)
-            {
-                output = result;
-            }
-            else
-            {
-                throw new ArgumentException("Not found", nameof(id));
-            }
-
-            return output;
+            var suppliers = GetArticleSupplier().Find(x => x.Id == id);
+            return suppliers;
         }
 
         #endregion
@@ -93,7 +83,8 @@ namespace ArticleSupplierCatalog.Utilities
                         {
                             Id = 1,
                             NameOfArticle = "Article 1 from SupplierNo2",
-                            ArticlePrice = 140
+                            ArticlePrice = 140,
+                            IsSold = true
                         },
                         new Article
                         {
