@@ -11,9 +11,9 @@ namespace TheShop
     public class Application : IApplication
     {
         private readonly IArticleSupplier _articleSupplierProcessor;
-        private readonly IDatabaseDriver _supplierProcessor;
         private readonly Logger _logger = new Logger();
         private readonly ShopService _service = new ShopService();
+        private readonly IDatabaseDriver _supplierProcessor;
 
         public Application(IArticleSupplier articleSupplierProcessor, IDatabaseDriver supplierProcessor)
         {
@@ -28,7 +28,7 @@ namespace TheShop
 
         private void IdentifyNextStep()
         {
-            string selectedAction = "";
+            var selectedAction = "";
 
             do
             {
@@ -57,18 +57,17 @@ namespace TheShop
 
                 Console.WriteLine("Hit return to continue...");
                 Console.ReadLine();
-
             } while (selectedAction != "4");
         }
 
         private void OrderAndSellArticle()
         {
             Console.Write("Enter article Id you want to buy: ");
-                var articleId = Convert.ToInt32(Console.ReadLine());
-                Console.Write("Enter maximum expected price: ");
-                var minExpectedPrice = Convert.ToInt32(Console.ReadLine());
-                var buyerId = 1;
-                _service.OrderAndSellArticle(articleId, minExpectedPrice, buyerId);
+            var articleId = Convert.ToInt32(Console.ReadLine());
+            Console.Write("Enter maximum expected price: ");
+            var minExpectedPrice = Convert.ToInt32(Console.ReadLine());
+            var buyerId = 1;
+            _service.OrderAndSellArticle(articleId, minExpectedPrice, buyerId);
         }
 
         private void DisplayArticles(List<Article> articles)
@@ -92,18 +91,15 @@ namespace TheShop
             try
             {
                 Console.WriteLine("Enter Id of supplier");
-                int id = Convert.ToInt32(Console.ReadLine());
+                var id = Convert.ToInt32(Console.ReadLine());
                 var supplier = _supplierProcessor.GetSupplierById(id);
                 if (supplier != null)
                 {
                     Console.WriteLine($"Supplier has been found. Id =  {supplier.Id}, name= {supplier.NameOfSupplier}");
                     foreach (var articles in supplier.ListOfArticles)
-                    {
                         if (articles.IsSold == false)
-                        {
-                            Console.WriteLine($"This supplier has following articles in stock: Id: {articles.Id} , name: {articles.NameOfArticle}, price: {articles.ArticlePrice}");
-                        }
-                    }
+                            Console.WriteLine(
+                                $"This supplier has following articles in stock: Id: {articles.Id} , name: {articles.NameOfArticle}, price: {articles.ArticlePrice}");
                 }
                 else
                 {
@@ -118,7 +114,7 @@ namespace TheShop
 
         private string GetActionChoice()
         {
-            string output = "";
+            var output = "";
 
             Console.Clear();
             Console.WriteLine("Menu Options".ToUpper());

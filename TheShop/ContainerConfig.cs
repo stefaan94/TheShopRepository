@@ -2,7 +2,6 @@
 using ArticleSupplierCatalog.Utilities;
 using Autofac;
 
-
 namespace TheShop
 {
     public static class ContainerConfig

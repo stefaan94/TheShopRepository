@@ -1,9 +1,9 @@
 ﻿using System;
 
-
 namespace ArticleSupplierCatalog.Helpers
 {
     #region logger
+
     public class Logger
     {
         public void Info(string message)
@@ -21,5 +21,6 @@ namespace ArticleSupplierCatalog.Helpers
             Console.WriteLine(message);
         }
     }
+
     #endregion
 }

@@ -8,6 +8,5 @@ namespace ArticleSupplierCatalog.Logic
         List<Article> GetFlatList();
         Article OrderArticle(int articleId, int maxExpectedPrice, int buyerId);
         void SellArticle(Article articleForSale, int buyerId);
-        
     }
 }

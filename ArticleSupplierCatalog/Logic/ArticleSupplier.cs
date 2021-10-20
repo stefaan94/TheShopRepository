@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ArticleSupplierCatalog.Helpers;
 using ArticleSupplierCatalog.Models;
 using ArticleSupplierCatalog.Utilities;
 
@@ -10,13 +9,6 @@ namespace ArticleSupplierCatalog.Logic
     public class ArticleSupplier : IArticleSupplier
     {
         private readonly IDatabaseDriver _database = new DatabaseDriver();
-
-        #region addArticleRegion
-        public void Add(Article article)
-        {
-            _database.Add(article);
-        }
-        #endregion
 
         #region listOfArticles
         public List<Article> GetFlatList()
@@ -30,20 +22,11 @@ namespace ArticleSupplierCatalog.Logic
                 internalDictionary.Add(supplier.Id, articles);
                 flatList = internalDictionary.SelectMany(d => d.Value).OrderByDescending(x => x.ArticlePrice).ToList();
             }
+
             return flatList;
         }
         #endregion
 
-        public bool FindArticleById(int id)
-        {
-            var article = GetFlatList().Find(x => x.Id == id);
-            if (article != null)
-            {
-                return true;
-            }
-            return false;
-        }
-        
         #region orderRegion
         public Article OrderArticle(int articleId, int maxExpectedPrice, int buyerId)
         {
@@ -58,14 +41,12 @@ namespace ArticleSupplierCatalog.Logic
                     if (findMinPrice == articles.ArticlePrice)
                     {
                         if (articles.IsSold) continue;
-                       
-                        if (maxExpectedPrice >= articles.ArticlePrice)
-                        {
-                            article = articles;
-                        }
+
+                        if (maxExpectedPrice >= articles.ArticlePrice) article = articles;
                     }
                 }
             }
+
             return article;
         }
         #endregion
@@ -81,6 +62,21 @@ namespace ArticleSupplierCatalog.Logic
                 Add(articleForSale);
             }
         }
+
         #endregion
+
+        #region addArticleRegion
+        public void Add(Article article)
+        {
+            _database.Add(article);
+        }
+
+        #endregion
+        public bool FindArticleById(int id)
+        {
+            var article = GetFlatList().Find(x => x.Id == id);
+            if (article != null) return true;
+            return false;
+        }
     }
 }

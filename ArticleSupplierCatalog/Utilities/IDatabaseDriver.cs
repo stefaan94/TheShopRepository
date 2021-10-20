@@ -8,6 +8,5 @@ namespace ArticleSupplierCatalog.Utilities
         List<Supplier> GetArticleSupplier();
         Supplier GetSupplierById(int id);
         void Add(Article article);
-
     }
 }

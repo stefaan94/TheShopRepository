@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using ArticleSupplierCatalog.Logic;
 using ArticleSupplierCatalog.Models;
 using ArticleSupplierCatalog.Utilities;
 using Autofac.Extras.Moq;
-using Moq;
 using Xunit;
 
 namespace TheShopTests.Logic
@@ -29,10 +26,8 @@ namespace TheShopTests.Logic
                 Assert.True(actual != null);
                 Assert.Equal(expected.Count, actual.Count);
 
-                for (int i = 0; i < expected.Count; i++)
-                {
+                for (var i = 0; i < expected.Count; i++)
                     Assert.Equal(expected[i].NameOfSupplier, actual[i].NameOfSupplier);
-                }
             }
         }
 
@@ -54,7 +49,7 @@ namespace TheShopTests.Logic
                 Assert.True(actual != null);
                 Assert.Equal(expected.Count, actual.Count);
 
-                for (int i = 0; i < expected.Count; i++)
+                for (var i = 0; i < expected.Count; i++)
                 {
                     Assert.Equal(expected[i].Id, actual[i].Id);
                     Assert.Equal(expected[i].NameOfArticle, actual[i].NameOfArticle);
@@ -90,7 +85,7 @@ namespace TheShopTests.Logic
         {
             using (var mock = AutoMock.GetLoose())
             {
-                var article = new Article()
+                var article = new Article
                 {
                     Id = 1,
                     NameOfArticle = "Article 1 from SupplierNo1",
@@ -108,6 +103,7 @@ namespace TheShopTests.Logic
                 Assert.True(article.IsSold);
             }
         }
+
         [Fact]
         public void SellArticle_Null()
         {
@@ -175,6 +171,5 @@ namespace TheShopTests.Logic
             };
             return articles;
         }
-
     }
 }

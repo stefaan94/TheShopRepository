@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using ArticleSupplierCatalog.Helpers;
-using ArticleSupplierCatalog.Logic;
 using ArticleSupplierCatalog.Models;
 
 namespace ArticleSupplierCatalog.Utilities
@@ -10,11 +8,13 @@ namespace ArticleSupplierCatalog.Utilities
     public class DatabaseDriver : IDatabaseDriver
     {
         #region listArticleSupplier
+
         public List<Supplier> GetArticleSupplier()
         {
             var articles = GetSupplierArticles();
             return articles.ToList();
         }
+
         #endregion
 
         #region getArticleById
@@ -28,21 +28,20 @@ namespace ArticleSupplierCatalog.Utilities
         #endregion
 
         #region addArticleRegion
+
         public void Add(Article article)
         {
-            List<Article> _articles = new List<Article>();
-            if(article != null)
-            {
+            var _articles = new List<Article>();
+            if (article != null)
                 _articles.Add(article);
-            }
-            else 
-            {
+            else
                 throw new Exception();
-            }
         }
+
         #endregion
 
         #region listOfArticleSupplier
+
         public List<Supplier> GetSupplierArticles()
         {
             var articles = new List<Supplier>
@@ -103,6 +102,7 @@ namespace ArticleSupplierCatalog.Utilities
             };
             return articles;
         }
+
         #endregion
     }
 }
